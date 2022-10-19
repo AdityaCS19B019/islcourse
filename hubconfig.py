@@ -15,6 +15,7 @@ from torchvision.transforms import ToTensor
 from sklearn.metrics import confusion_matrix
 import numpy as np
 device = "cuda" if torch.cuda.is_available() else "cpu"
+loss_fn = nn.CrossEntropyLoss()
 
 def kali():
   print ('kali')
@@ -55,7 +56,7 @@ def load_data():
         download=True,
         transform=ToTensor(),
     )
-    
+    print('loading data')
     return training_data, test_data
 
 def create_dataloaders(training_data, test_data, batch_size=64):
@@ -67,7 +68,7 @@ def create_dataloaders(training_data, test_data, batch_size=64):
         print(f"Shape of X [N, C, H, W]: {X.shape}")
         print(f"Shape of y: {y.shape} {y.dtype}")
         break
-        
+    print('returning dataloaders')
     return train_dataloader, test_dataloader
 
 training_data, test_data = load_data();
@@ -105,18 +106,19 @@ def get_model_advanced(train_data_loader=train_dataloader, n_epochs=10,lr=1e-4,c
       if batch % 100 == 0:
           loss, current = loss.item(), batch * len(X)
           print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
-          print ('Returning model... (rollnumber: xx)')
-      return model
+  print ('Returning model... (rollnumber: cs19b019)')
+  return model
+
+model = get_model_advanced()
+
+
 
 def test_model(model1=None, test_data_loader=None):
 
   accuracy_val, precision_val, recall_val, f1score_val = 0, 0, 0, 0
-  # write your code here as per instructions
-  # ... your code ...
-  # ... your code ...
-  # ... and so on ...
-  # calculate accuracy, precision, recall and f1score
+  
   
   print ('Returning metrics... (rollnumber: xx)')
   
   return accuracy_val, precision_val, recall_val, f1score_val
+
