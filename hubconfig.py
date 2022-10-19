@@ -14,6 +14,7 @@ from torchvision import datasets
 from torchvision.transforms import ToTensor
 from sklearn.metrics import confusion_matrix
 import numpy as np
+from sklearn.metrics import precision_recall_fscore_support
 device = "cuda" if torch.cuda.is_available() else "cpu"
 loss_fn = nn.CrossEntropyLoss()
 
@@ -113,10 +114,75 @@ model = get_model_advanced()
 
 
 
+# sample invocation torch.hub.load(myrepo,'test_model',model1=model,test_data_loader=test_data_loader,force_reload=True)
+def test_model(model1=model, test_data_loader=test_dataloader,force_reload=True):
+
+  accuracy_val, precision_val, recall_val, f1score_val = 0, 0, 0, 0
+  # write your code here as per instructions
+  # ... your code ...
+  # ... your code ...
+  # ... and so on ...
+  # calculate accuracy, precision, recall and f1score
+
+  size = len(test_data_loader.dataset)
+  num_batches = len(test_data_loader)
+  model1.eval()
+  test_loss, correct = 0, 0
+  with torch.no_grad():
+      for X, y in test_data_loader:
+          X, y = X.to(device), y.to(device)
+          pred = model1(X)
+          test_loss += loss_fn(pred, y).item()
+          correct += (pred.argmax(1) == y).type(torch.float).sum().item()
+  test_loss /= num_batches
+  correct /= size
+
+
+  accuracy_val = correct
+
+  classes = [
+    "BMW",
+    "Mecedes",
+    "Porche",
+    "Ducati",
+    "Cullinen",
+    "Suzuki",
+    "Skoda",
+    "Volvo",
+    "Bentley",
+    "Audi",
+  ]
+
+  model = model1.eval()
+  x = []
+  y = [] 
+  y1 = []
+  for i in test_data :
+    x.append(i[0])
+    y.append(i[1])
+    with torch.no_grad():
+      pred = model(i[0])
+      predicted = pred[0].argmax(0)
+      # print()
+      y1.append(classes.index(classes[predicted]))
+  
+  print ('Returning metrics... (rollnumber: cs19b019)')
+  print(y)
+  print(y1)
+  precision_recall_fscore_support(y, y1, average='macro')
+  
+  return accuracy_val, precision_val, recall_val, f1score_val
+
+ans = test_model()
+
 def test_model(model1=None, test_data_loader=None):
 
   accuracy_val, precision_val, recall_val, f1score_val = 0, 0, 0, 0
-  
+  # write your code here as per instructions
+  # ... your code ...
+  # ... your code ...
+  # ... and so on ...
+  # calculate accuracy, precision, recall and f1score
   
   print ('Returning metrics... (rollnumber: xx)')
   
