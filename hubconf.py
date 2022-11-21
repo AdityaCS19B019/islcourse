@@ -15,17 +15,12 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from sklearn.linear_model import LogisticRegression
 import numpy as np
-# You can import whatever standard packages are required
-# full sklearn, full pytorch, pandas, matplotlib, numpy are all available
-# Ideally you do not need to pip install any other packages!
-# Avoid pip install requirement on the evaluation program side, if you use above packages and sub-packages of them, then that is fine!  
-  # This a multi component loss function - lc1 for class prediction loss and lc2 for auto-encoding lo
+from sklearn.cluster import KMeans
+from sklearn.metrics.cluster import homogeneity_score, completeness_score, v_measure_score
 
 def get_data_blobs(n_points=100):
   X, y = make_blobs(n_samples=n_points, centers=3, n_features=2,random_state=0)
   return X,y
-
-
 
 def get_data_circles(n_points=100):
   X, y = make_circles(n_samples=n_points, shuffle=True,  factor=0.3, noise=0.05, random_state=0)
@@ -38,26 +33,47 @@ def get_data_mnist():
   return X,y
 
 def build_kmeans(X=None,k=10):
-  pass
-  # k is a variable, calling function can give a different number
-  # Refer to sklearn KMeans method
-  km = None # this is the KMeans object
-  # write your code ...
+  km = KMeans(n_clusters=k, random_state=0).fit(X)
   return km
 
 def assign_kmeans(km=None,X=None):
-  pass
-  # For each of the points in X, assign one of the means
-  # refer to predict() function of the KMeans in sklearn
-  # write your code ...
-  ypred = None
+  ypred = km.predict(X)
   return ypred
 
 def compare_clusterings(ypred_1=None,ypred_2=None):
-  # pass
-  # # refer to sklearn documentation for homogeneity, completeness and vscore
-  h,c,v = 0,0,0 # you need to write your code to find proper values
+  h = "%.6f" % homogeneity_score(ypred_1, ypred_2)
+  c = "%.6f" % completeness_score(ypred_1, ypred_2)
+  v = "%.6f" % v_measure_score(ypred_1, ypred_2)
   return h,c,v
+
+def test_student_part1():
+
+  # print ('testing student...',examplerollnum)
+
+  # examplerepo = examplerollnum + 'iittp/islcourse:endsem'
+
+  # entrypoints = torch.hub.list(examplerepo,force_reload=True)
+  X_bl,y_bl = get_data_blobs(n_points=150)
+  X_ci , y_ci = get_data_circles(n_points=150)
+  km = build_kmeans(X=X_bl , k=11)
+  ypred_bl = assign_kmeans(km=km , X = X_bl);
+  ypred_ci = assign_kmeans(km , X_ci);
+  h , c , v = compare_clusterings(ypred_1=ypred_bl , ypred_2= ypred_ci)
+  print("h = " + str(h));
+  print("c = " + str(c));
+  print("v = " + str(v));
+  # X_ci, y_ci = torch.hub.load(examplerepo,'get_data_circles',n_points=150, force_reload=False)
+
+  # km = torch.hub.load(examplerepo,'build_kmeans',X=X_bl, k=11, force_reload=False)
+
+  # ypred_bl = torch.hub.load(examplerepo,'assign_kmeans',km=km,X=X_bl, force_reload=False)
+  # ypred_ci = torch.hub.load(examplerepo,'assign_kmeans',km=km,X=X_ci, force_reload=False)
+
+  # h,c,v = torch.hub.load(examplerepo,'compare_clusterings',ypred_1=ypred_bl,ypred_2=ypred_ci, force_reload=False)
+
+  return h,c,v
+
+test_student_part1()
 
 """**End of Part - 1**"""
 
