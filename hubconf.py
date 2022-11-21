@@ -7,23 +7,80 @@ Original file is located at
     https://colab.research.google.com/drive/1JJ04oVLVq7g9uwcgABwQ49er1_wG807w
 """
 
-# kali
 import torch
 from torch import nn
 import torch.optim as optim
-
+from sklearn.datasets import make_blobs, make_circles, load_digits
+import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
+from sklearn.linear_model import LogisticRegression
+import numpy as np
 # You can import whatever standard packages are required
-
 # full sklearn, full pytorch, pandas, matplotlib, numpy are all available
 # Ideally you do not need to pip install any other packages!
-# Avoid pip install requirement on the evaluation program side, if you use above packages and sub-packages of them, then that is fine!
+# Avoid pip install requirement on the evaluation program side, if you use above packages and sub-packages of them, then that is fine!  
+  # This a multi component loss function - lc1 for class prediction loss and lc2 for auto-encoding lo
 
-###### PART 1 ######
+def get_data_blobs(n_points=100):
+  X, y = make_blobs(n_samples=n_points, centers=3, n_features=2,random_state=0)
+  return X,y
 
 
 
+def get_data_circles(n_points=100):
+  X, y = make_circles(n_samples=n_points, shuffle=True,  factor=0.3, noise=0.05, random_state=0)
+  return X,y
 
-###### PART 2 ######
+def get_data_mnist():
+  digits = load_digits()
+  X=digits.data
+  y=digits.target
+  return X,y
+
+def build_kmeans(X=None,k=10):
+  pass
+  # k is a variable, calling function can give a different number
+  # Refer to sklearn KMeans method
+  km = None # this is the KMeans object
+  # write your code ...
+  return km
+
+def assign_kmeans(km=None,X=None):
+  pass
+  # For each of the points in X, assign one of the means
+  # refer to predict() function of the KMeans in sklearn
+  # write your code ...
+  ypred = None
+  return ypred
+
+def compare_clusterings(ypred_1=None,ypred_2=None):
+  # pass
+  # # refer to sklearn documentation for homogeneity, completeness and vscore
+  h,c,v = 0,0,0 # you need to write your code to find proper values
+  return h,c,v
+
+"""**End of Part - 1**"""
+
+def build_lr_model(X=None, y=None):
+  pass
+  lr_model = None
+  # write your code...
+  # Build logistic regression, refer to sklearn
+  return lr_model
+
+def build_rf_model(X=None, y=None):
+  pass
+  rf_model = None
+  # write your code...
+  # Build Random Forest classifier, refer to sklearn
+  return rf_model
+
+def get_metrics(model=None,X=None,y=None):
+  pass
+  # Obtain accuracy, precision, recall, f1score, auc score - refer to sklearn metrics
+  acc, prec, rec, f1, auc = 0,0,0,0,0
+  # write your code here...
+  return acc, prec, rec, f1, auc
 
 def get_paramgrid_lr():
   # you need to return parameter grid dictionary for use in grid search cv
@@ -65,7 +122,7 @@ def perform_gridsearch_cv_multimetric(model=None, param_grid=None, cv=5, X=None,
   
   return top1_scores
 
-###### PART 3 ######
+"""**End of Part - 2**"""
 
 class MyNN(nn.Module):
   def __init__(self,inp_dim=64,hid_dim=13,num_classes=10):
@@ -89,9 +146,8 @@ class MyNN(nn.Module):
     x_dec = self.fc_decoder(x_enc)
     
     return y_pred, x_dec
-  
-  # This a multi component loss function - lc1 for class prediction loss and lc2 for auto-encoding loss
-  def loss_fn(self,x,yground,y_pred,xencdec):
+
+def loss_fn(self,x,yground,y_pred,xencdec):
     
     # class prediction loss
     # yground needs to be one hot encoded - write your code
@@ -103,7 +159,7 @@ class MyNN(nn.Module):
     lval = lc1 + lc2
     
     return lval
-    
+
 def get_mynn(inp_dim=64,hid_dim=13,num_classes=10):
   mynn = MyNN(inp_dim,hid_dim,num_classes)
   mynn.double()
@@ -138,71 +194,4 @@ def train_combined_encdec_predictor(mynn=None,X,y, epochs=11):
     
   return mynn
 
-def get_data_blobs(n_points=100):
-  pass
-  # write your code here
-  # Refer to sklearn data sets
-  X, y = None
-  # write your code ...
-  return X,y
-
-def get_data_circles(n_points=100):
-  pass
-  # write your code here
-  # Refer to sklearn data sets
-  X, y = None
-  # write your code ...
-  return X,y
-
-def get_data_mnist():
-  pass
-  # write your code here
-  # Refer to sklearn data sets
-  X,y = None
-  # write your code ...
-  return X,y
-
-def build_kmeans(X=None,k=10):
-  pass
-  # k is a variable, calling function can give a different number
-  # Refer to sklearn KMeans method
-  km = None # this is the KMeans object
-  # write your code ...
-  return km
-
-def assign_kmeans(km=None,X=None):
-  pass
-  # For each of the points in X, assign one of the means
-  # refer to predict() function of the KMeans in sklearn
-  # write your code ...
-  ypred = None
-  return ypred
-
-def compare_clusterings(ypred_1=None,ypred_2=None):
-  pass
-  # refer to sklearn documentation for homogeneity, completeness and vscore
-  h,c,v = 0,0,0 # you need to write your code to find proper values
-  return h,c,v
-
-"""**End of Part - 1**"""
-
-def build_lr_model(X=None, y=None):
-  pass
-  lr_model = None
-  # write your code...
-  # Build logistic regression, refer to sklearn
-  return lr_model
-
-def build_rf_model(X=None, y=None):
-  pass
-  rf_model = None
-  # write your code...
-  # Build Random Forest classifier, refer to sklearn
-  return rf_model
-
-def get_metrics(model=None,X=None,y=None):
-  pass
-  # Obtain accuracy, precision, recall, f1score, auc score - refer to sklearn metrics
-  acc, prec, rec, f1, auc = 0,0,0,0,0
-  # write your code here...
-  return acc, prec, rec, f1, auc
+"""**End of Exam**"""
