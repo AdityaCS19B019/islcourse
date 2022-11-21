@@ -77,26 +77,64 @@ test_student_part1()
 
 """**End of Part - 1**"""
 
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+
 def build_lr_model(X=None, y=None):
-  pass
-  lr_model = None
-  # write your code...
-  # Build logistic regression, refer to sklearn
+  lr_model = LogisticRegression(solver="liblinear",fit_intercept=False)
+  lr_model.fit(X,y)
   return lr_model
 
 def build_rf_model(X=None, y=None):
-  pass
-  rf_model = None
-  # write your code...
-  # Build Random Forest classifier, refer to sklearn
+  rf_model = RandomForestClassifier(random_state=400)
+  rf_model.fit(X,y)
   return rf_model
 
 def get_metrics(model=None,X=None,y=None):
-  pass
-  # Obtain accuracy, precision, recall, f1score, auc score - refer to sklearn metrics
   acc, prec, rec, f1, auc = 0,0,0,0,0
-  # write your code here...
+  y_pred = model.predict(X)
+  acc = accuracy_score(y, y_pred)
+  prec = precision_score(y, y_pred, average='micro')
+  rec =  recall_score(y, y_pred , average='micro')
+  f1 =  f1_score(y, y_pred, average='micro' )
+  auc = roc_auc_score(y, model.predict_proba(X), multi_class='ovr' )
   return acc, prec, rec, f1, auc
+
+from sklearn.model_selection import train_test_split
+
+def test_student_part2A():
+
+  # print ('testing student...',examplerollnum)
+
+  # examplerepo = examplerollnum + 'iittp/islcourse:endsem'
+
+  # entrypoints = torch.hub.list(examplerepo,force_reload=True)
+
+  # print (entrypoints)
+  X , y = get_data_mnist()
+  Xtrain , Xtest,ytrain , ytest = train_test_split(X,y,test_size=0.3)
+  clf_lr = build_lr_model(X=Xtrain , y = ytrain);
+  clf_rf = build_rf_model(X=Xtrain , y=ytrain);
+  a,p,r,f1,auc = get_metrics(model=clf_lr , X=Xtest , y=ytest);
+  
+  # X,y = torch.hub.load(examplerepo,'get_data_mnist', force_reload=True)
+
+  # Xtrain,Xtest,ytrain,ytest = train_test_split(X,y,test_size=0.3)
+
+  # clf_lr = torch.hub.load(examplerepo,'build_lr_model',X=Xtrain,y=ytrain, force_reload=True)
+
+  # clf_rf = torch.hub.load(examplerepo,'build_rf_model',X=Xtrain,y=ytrain, force_reload=True)
+
+  # a,p,r,f1,auc = torch.hub.load(examplerepo,'get_metrics',model=clf_lr,X=Xtest,y=ytest, force_reload=True)
+
+  print ('lr',a,p,r,f1,auc)
+  a,p,r,f1,auc = get_metrics(model=clf_rf , X=Xtest , y=ytest);
+  # a,p,r,f1,auc = torch.hub.load(examplerepo,'get_metrics',model=clf_rf,X=Xtest,y=ytest, force_reload=True)
+
+  print ('rf',a,p,r,f1,auc)
+
+test_student_part2A()
 
 def get_paramgrid_lr():
   # you need to return parameter grid dictionary for use in grid search cv
