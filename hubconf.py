@@ -46,35 +46,6 @@ def compare_clusterings(ypred_1=None,ypred_2=None):
   v = "%.6f" % v_measure_score(ypred_1, ypred_2)
   return h,c,v
 
-def test_student_part1():
-
-  # print ('testing student...',examplerollnum)
-
-  # examplerepo = examplerollnum + 'iittp/islcourse:endsem'
-
-  # entrypoints = torch.hub.list(examplerepo,force_reload=True)
-  X_bl,y_bl = get_data_blobs(n_points=150)
-  X_ci , y_ci = get_data_circles(n_points=150)
-  km = build_kmeans(X=X_bl , k=11)
-  ypred_bl = assign_kmeans(km=km , X = X_bl);
-  ypred_ci = assign_kmeans(km , X_ci);
-  h , c , v = compare_clusterings(ypred_1=ypred_bl , ypred_2= ypred_ci)
-  print("h = " + str(h));
-  print("c = " + str(c));
-  print("v = " + str(v));
-  # X_ci, y_ci = torch.hub.load(examplerepo,'get_data_circles',n_points=150, force_reload=False)
-
-  # km = torch.hub.load(examplerepo,'build_kmeans',X=X_bl, k=11, force_reload=False)
-
-  # ypred_bl = torch.hub.load(examplerepo,'assign_kmeans',km=km,X=X_bl, force_reload=False)
-  # ypred_ci = torch.hub.load(examplerepo,'assign_kmeans',km=km,X=X_ci, force_reload=False)
-
-  # h,c,v = torch.hub.load(examplerepo,'compare_clusterings',ypred_1=ypred_bl,ypred_2=ypred_ci, force_reload=False)
-
-  return h,c,v
-
-test_student_part1()
-
 """**End of Part - 1**"""
 
 from sklearn.linear_model import LogisticRegression
